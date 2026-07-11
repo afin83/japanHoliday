@@ -1,0 +1,13 @@
+# Local preview / tooling (contains machine-specific absolute paths)
+.claude/
+
+# Dependencies (none committed — this is a no-build static site)
+node_modules/
+
+# Vercel
+.vercel/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.log

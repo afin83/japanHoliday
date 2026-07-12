@@ -32,28 +32,24 @@
     <div class="trip-strip__snow" aria-hidden="true"></div>
     <div class="trip-strip__inner">
       <h1 class="trip-strip__title" id="tripTitle">Japan 2028</h1>
-      <p class="trip-strip__meta" id="tripMeta"></p>
+      <div class="map-mode" id="mapMode" role="group" aria-label="Map detail">
+        <button class="is-active" data-map-mode="route" type="button" aria-pressed="true">Route</button>
+        <button data-map-mode="day" type="button" aria-pressed="false">Day</button>
+      </div>
     </div>
   </header>
-
-  <!-- Legend / route key (collapsible) -->
-  <button class="legend-toggle" id="legendToggle" type="button" aria-expanded="false" aria-controls="legend">
-    <span class="legend-toggle__dot" aria-hidden="true"></span>
-    Route key
-  </button>
-  <div class="legend" id="legend" hidden></div>
-
-  <!-- Map detail mode: country-level route or a single day's movements -->
-  <div class="map-mode" id="mapMode" role="group" aria-label="Map detail">
-    <button class="is-active" data-map-mode="route" type="button" aria-pressed="true">Route</button>
-    <button data-map-mode="day" type="button" aria-pressed="false">Day</button>
-  </div>
 
   <!-- Route view: jump straight to a location (same as tapping its map pin) -->
   <div class="route-picker" id="routePicker" role="group" aria-label="Jump to a location" hidden></div>
 
   <section class="day-view" id="dayView" aria-label="Day map controls" hidden>
     <div class="day-picker" id="dayPicker" aria-label="Choose a day"></div>
+    <button class="day-step-nav day-step-nav--prev" id="dayStepPrev" type="button" aria-label="Previous itinerary step">
+      <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path fill="currentColor" d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+    </button>
+    <button class="day-step-nav day-step-nav--next" id="dayStepNext" type="button" aria-label="Next itinerary step">
+      <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path fill="currentColor" d="M8.59 16.59 10 18l6-6-6-6-1.41 1.41L13.17 12z"/></svg>
+    </button>
     <article class="day-brief" id="dayBrief"></article>
   </section>
 

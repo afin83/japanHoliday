@@ -3,6 +3,7 @@ const DayView = (() => {
   let map;
   let activeDay = 1;
   let activeFocus = null;
+  let activeStep = null;
   let isBriefCollapsed = false;
   let drawVersion = 0;
   const routeCache = new Map();
@@ -10,6 +11,8 @@ const DayView = (() => {
   const picker = document.getElementById("dayPicker");
   const brief = document.getElementById("dayBrief");
   const host = document.getElementById("dayView");
+  const prevBtn = document.getElementById("dayStepPrev");
+  const nextBtn = document.getElementById("dayStepNext");
 
   const COLORS = {
     hotel: "#0b2545", attraction: "#2f6fb0", station: "#6B7280",
@@ -120,6 +123,15 @@ const DayView = (() => {
     return Math.min(plan.stops.length - 1, Math.round(ratio * (plan.stops.length - 1)));
   }
 
+  function focusForStep(day, plan, itemIndex, blocks = travelBlocks(day, plan)) {
+    const item = day.items[itemIndex];
+    if (!item) return null;
+    const block = blocks[itemIndex];
+    if (block) return { type: "travel", start: block.start, end: block.end, label: block.label };
+    const stopIndex = itemStopIndex(item, itemIndex, day, plan, block);
+    return { type: "place", stop: stopIndex, label: plan.stops[stopIndex]?.label };
+  }
+
   function renderBrief(day, plan) {
     const blocks = travelBlocks(day, plan);
     const selectedKey = activeFocus ? `${activeFocus.type}:${activeFocus.start ?? activeFocus.stop}` : "";
@@ -186,6 +198,48 @@ const DayView = (() => {
     const day = days.find((entry) => entry.n === activeDay);
     const plan = dayMaps[activeDay];
     if (day && plan) renderBrief(day, plan);
+  }
+
+  function updateStepNav() {
+    if (!prevBtn || !nextBtn) return;
+    const currentIndex = days.findIndex((day) => day.n === activeDay);
+    const day = days[currentIndex];
+    const isAtFirstStep = currentIndex === 0 && (activeStep == null || activeStep <= 0);
+    const isAtLastStep = currentIndex === days.length - 1 && activeStep === (day?.items.length || 0) - 1;
+    prevBtn.disabled = isAtFirstStep;
+    nextBtn.disabled = isAtLastStep;
+    prevBtn.setAttribute("aria-label", activeStep == null ? "Previous day" : "Previous itinerary step");
+    nextBtn.setAttribute("aria-label", activeStep == null ? "First itinerary step" : "Next itinerary step");
+  }
+
+  function focusStep(dayNumber, stepIndex) {
+    const day = days.find((entry) => entry.n === dayNumber);
+    const plan = dayMaps[dayNumber];
+    if (!day || !plan || !day.items.length) return;
+    activeDay = dayNumber;
+    activeStep = Math.max(0, Math.min(stepIndex, day.items.length - 1));
+    activeFocus = focusForStep(day, plan, activeStep);
+    renderPicker();
+    renderBrief(day, plan);
+    updateStepNav();
+    draw(day, plan, activeFocus);
+  }
+
+  function step(delta) {
+    const currentIndex = days.findIndex((day) => day.n === activeDay);
+    if (currentIndex < 0) return;
+    const day = days[currentIndex];
+    const currentStep = activeStep == null
+      ? (delta > 0 ? -1 : day.items.length)
+      : activeStep;
+    const nextStep = currentStep + delta;
+    if (nextStep >= 0 && nextStep < day.items.length) {
+      focusStep(activeDay, nextStep);
+      return;
+    }
+    const nextDay = days[currentIndex + delta];
+    if (!nextDay) return;
+    focusStep(nextDay.n, delta > 0 ? 0 : nextDay.items.length - 1);
   }
 
   function decodePolyline6(encoded) {
@@ -309,17 +363,21 @@ const DayView = (() => {
     if (!day || !plan) return;
     activeDay = n;
     activeFocus = null;
+    activeStep = null;
     renderPicker();
     renderBrief(day, plan);
+    updateStepNav();
     draw(day, plan);
   }
 
-  function selectFocus(focus) {
+  function selectFocus(focus, stepIndex = null) {
     const day = days.find((d) => d.n === activeDay);
     const plan = dayMaps[activeDay];
     if (!day || !plan) return;
     activeFocus = focus;
+    activeStep = stepIndex;
     renderBrief(day, plan);
+    updateStepNav();
     draw(day, plan, focus);
   }
 
@@ -330,8 +388,14 @@ const DayView = (() => {
   }
 
   function toggleFocus(focus) {
+    const day = days.find((d) => d.n === activeDay);
+    const plan = dayMaps[activeDay];
+    const blocks = day && plan ? travelBlocks(day, plan) : [];
+    const stepIndex = day && plan
+      ? day.items.findIndex((_, index) => sameFocus(focusForStep(day, plan, index, blocks), focus))
+      : null;
     if (sameFocus(activeFocus, focus)) select(activeDay);
-    else selectFocus(focus);
+    else selectFocus(focus, stepIndex >= 0 ? stepIndex : null);
   }
 
   function show() {
@@ -351,5 +415,8 @@ const DayView = (() => {
     MapView.fitAll();
   }
 
-  return { show, hide, select };
+  return { show, hide, select, step };
 })();
+
+document.getElementById("dayStepPrev")?.addEventListener("click", () => DayView.step?.(-1));
+document.getElementById("dayStepNext")?.addEventListener("click", () => DayView.step?.(1));

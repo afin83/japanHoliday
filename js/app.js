@@ -51,39 +51,9 @@ const App = (() => {
     Tabs.open(view); // registers its own overlay
   }
 
-  /* ---------- trip strip + legend ---------- */
+  /* ---------- trip strip ---------- */
   function fillTripStrip() {
     document.getElementById("tripTitle").textContent = trip.title.replace(" — Family Trip", "");
-    const meta = `${Fmt.dateRange(trip.depart, trip.returnFlight)} · ${trip.nights} nights · ${trip.route.join(" → ")}`;
-    document.getElementById("tripMeta").textContent = meta;
-  }
-
-  function buildLegend() {
-    const box = document.getElementById("legend");
-    box.innerHTML = "";
-    box.appendChild(el("h3", { text: "Bases" }));
-    const order = ["osaka", "matsumoto", "shiga", "tokyo"];
-    for (const k of order) {
-      box.appendChild(el("div", { class: "legend__row" }, [
-        el("span", { class: "legend__swatch", style: "background:" + segments[k].color }),
-        segments[k].label,
-      ]));
-    }
-    const modeBox = el("div", { class: "legend__mode" });
-    const modes = [
-      ["Bullet / express", "solid"],
-      ["Express bus", "dashed"],
-      ["Transfer", "dotted"],
-    ];
-    for (const [label, kind] of modes) {
-      const border = kind === "solid" ? "3px solid var(--ink-soft)"
-        : kind === "dashed" ? "3px dashed var(--ink-soft)" : "3px dotted var(--ink-soft)";
-      modeBox.appendChild(el("div", { class: "legend__row" }, [
-        el("span", { class: "legend__line", style: "border-top:" + border }),
-        label,
-      ]));
-    }
-    box.appendChild(modeBox);
   }
 
   /* ---------- wiring ---------- */
@@ -97,8 +67,6 @@ const App = (() => {
           other.setAttribute("aria-pressed", String(on));
         });
         if (activeClose) closeOverlay(false);
-        document.getElementById("legendToggle").hidden = mode === "day";
-        document.getElementById("legend").hidden = true;
         if (mode === "day") { DayView.show(); RouteNav.hide(); }
         else { DayView.hide(); RouteNav.show(); }
       });
@@ -112,14 +80,6 @@ const App = (() => {
     document.getElementById("scrim").addEventListener("click", () => closeOverlay(false));
     document.getElementById("recenterBtn").addEventListener("click", () => MapView.fitAll());
 
-    const legendToggle = document.getElementById("legendToggle");
-    const legend = document.getElementById("legend");
-    legendToggle.addEventListener("click", () => {
-      const open = legend.hidden;
-      legend.hidden = !open;
-      legendToggle.setAttribute("aria-expanded", String(open));
-    });
-
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && activeClose) closeOverlay(false);
     });
@@ -130,7 +90,6 @@ const App = (() => {
 
   function init() {
     fillTripStrip();
-    buildLegend();
     MapView.init();
     RouteNav.init();
     wire();

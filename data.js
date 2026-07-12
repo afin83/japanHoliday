@@ -72,14 +72,14 @@ const locations = [
     id: "osaka", name: "Osaka", type: "base", segment: "osaka",
     coords: [34.7046, 135.4961],
     arrive: "2028-01-07", depart: "2028-01-10", nights: 3,
-    summary: "Arrival city — Universal Studios Japan plus an easy recovery day.",
+    summary: "Arrival city — Universal Studios Japan plus an easy Osaka Bay recovery day.",
     weather: { high: 9, low: 3, icon: "sun", desc: "Cold but mild for Japan — dry and often sunny, with occasional light rain. ~5 hrs of sun a day." },
-    hotelNote: "OMO7 Osaka (Hoshino Resorts), at Shin-Imamiya. Free door-to-door shuttle to Universal Studios Japan (~30 min; reserve ahead — morning departures 08:00 & 09:20, returns 17:30 & 18:50), so no train on the park morning. Still a strong city base: Namba ~4 min, a direct Midosuji-line hop to Shin-Osaka on Day 4, and Shinsekai / Tennoji on the doorstep.",
+    hotelNote: "Hotel Universal Port, at Universal City. An easy walk to Universal Studios Japan and CityWalk, with the Captain Line pier directly behind the hotel for the ~10-minute ferry to Kaiyukan and Tempozan Harbor Village. This makes both Osaka days low-friction; no direct Shin-Osaka hotel shuttle found, so plan a taxi/private transfer on Day 4.",
     poi: [
       { name: "Universal Studios Japan", coords: [34.6654, 135.4323] },
-      { name: "Shinsekai / Tsutenkaku",  coords: [34.6525, 135.5063] },
-      { name: "Abeno Harukas 300",       coords: [34.6458, 135.5138] },
       { name: "Kaiyukan Aquarium",       coords: [34.6545, 135.4290] },
+      { name: "Tempozan Harbor Village", coords: [34.6551, 135.4292] },
+      { name: "Tempozan Ferris Wheel",   coords: [34.6558, 135.4288] },
       { name: "Dotonbori",               coords: [34.6687, 135.5013] }
     ],
     bookings: []
@@ -121,12 +121,12 @@ const locations = [
     bookings: []
   },
   {
-    id: "tokyo", name: "Tokyo — Shinjuku", type: "base", segment: "tokyo",
-    coords: [35.6896, 139.7006],
+    id: "tokyo", name: "Tokyo — Hotel East 21", type: "base", segment: "tokyo",
+    coords: [35.6741, 139.8175],
     arrive: "2028-01-16", depart: "2028-01-19", nights: 3,
-    summary: "City finale: Disneyland (via shuttle), the Godzilla head, Shibuya, teamLab.",
+    summary: "Eastern Tokyo finale: teamLab and Tokyo Bay access, Shibuya/Shinjuku excursion, plus Disneyland via Good Neighbor shuttle.",
     weather: { high: 11, low: 3, icon: "sun", desc: "Crisp, sunny and dry — one of the sunniest months (~69% clear). Little rain and snow is rare." },
-    hotelNote: "Shinjuku Good Neighbor Hotel (e.g. Keio Plaza) — free door-to-park Disney shuttle + central base. Reserve the shuttle in advance (limited seats).",
+    hotelNote: "Hotel East 21 Tokyo, near Toyocho in Koto. A Tokyo Disney Resort Good Neighbor Hotel with complimentary reserved shuttle buses for hotel guests; better for Disney, teamLab/Toyosu and eastern Tokyo, but Shibuya/Shinjuku become a planned cross-town outing.",
     poi: [
       { name: "Godzilla head (Shinjuku)",     coords: [35.6955, 139.7020] },
       { name: "Shibuya",                       coords: [35.6595, 139.7005] },
@@ -164,39 +164,39 @@ const days = [
   },
   {
     n: 2, date: "2028-01-08", weekday: "Sat", baseId: "osaka", segment: "osaka",
-    title: "Osaka at an easy pace (recover from the flight)",
+    title: "Aquarium + Tempozan Harbor Village (easy pace)",
     items: [
       { time: "09:00", text: "Relaxed hotel breakfast (ease off the jet-lag)" },
-      { time: "09:45", text: "Walk to Shinsekai + Tsutenkaku Tower (right by the hotel)", mode: "Walk", modeClass: "local" },
-      { time: "10:45", text: "Abeno Harukas 300 — observation deck, Japan's tallest building", mode: "Walk / 1 stop", modeClass: "local" },
-      { time: "12:00", text: "Lunch around Tennoji / Abeno" },
-      { time: "13:15", text: "→ Osakako for the aquarium (Chuo line)", mode: "Metro/subway", modeClass: "local" },
-      { time: "14:00", text: "Kaiyukan Aquarium (Tempozan) — the big one" },
-      { time: "16:30", text: "Tempozan Ferris wheel + harbour (optional)" },
-      { time: "17:30", text: "→ Namba / Dotonbori (4 min from Shin-Imamiya)", mode: "Metro/subway", modeClass: "local" },
-      { time: "18:00", text: "Dotonbori — street food, lights, dinner" }
+      { time: "09:40", text: "Walk behind Hotel Universal Port to Universal City Port", mode: "Walk", modeClass: "local" },
+      { time: "10:00", text: "Captain Line ferry → Kaiyukan West Wharf (~10 min; check the 2028 timetable)", mode: "Ferry", modeClass: "coach" },
+      { time: "10:15", text: "Kaiyukan Aquarium — take it slowly" },
+      { time: "13:00", text: "Lunch at Tempozan Marketplace / Naniwa Kuishinbo Yokocho" },
+      { time: "14:00", text: "Tempozan Harbor Village — choose LEGOLAND Discovery Center, Anipa petting zoo, shops/arcade, or a waterfront wander" },
+      { time: "16:30", text: "Tempozan Giant Ferris Wheel over Osaka Bay" },
+      { time: "17:30", text: "Captain Line ferry → Universal City Port", mode: "Ferry", modeClass: "coach" },
+      { time: "18:00", text: "Easy dinner at Universal CityWalk" }
     ],
-    meals: { breakfast: "Hotel buffet, or a café near the hotel / Shinsekai", lunch: "Tennoji / Abeno — café, burger, or the Harukas dining floors", dinner: "Dotonbori — burgers, pizza/Italian, or steak" }
+    meals: { breakfast: "Hotel Universal Port buffet", lunch: "Tempozan Marketplace — Naniwa Kuishinbo Yokocho, café, burger, or food court", dinner: "Universal CityWalk — Hard Rock Cafe, Bubba Gump, pizza, burgers, or TAKOPA" }
   },
   {
     n: 3, date: "2028-01-09", weekday: "Sun", baseId: "osaka", segment: "osaka",
     title: "Universal Studios Japan",
     items: [
-      { time: "07:00", text: "Early breakfast at OMO7 (before the shuttle)" },
-      { time: "08:00", text: "OMO7 → Universal Studios Japan (free hotel shuttle, ~30 min — reserve ahead)", mode: "Free USJ shuttle", modeClass: "transfer" },
-      { time: "08:30", text: "Arrive USJ; park opens 09:00 — straight to Super Nintendo World" },
+      { time: "07:00", text: "Early breakfast at Hotel Universal Port" },
+      { time: "08:15", text: "Walk to Universal Studios Japan (~5–10 min)", mode: "Walk", modeClass: "local" },
+      { time: "08:30", text: "Queue for USJ; park opens 09:00 — straight to Super Nintendo World" },
       { time: "12:30", text: "Lunch in park" },
       { time: "19:00", text: "Dinner at Universal CityWalk" },
-      { time: "20:30", text: "Head back to OMO7 (JR via Nishikujo, ~30 min — free shuttle's last return is 18:50)", mode: "JR trains", modeClass: "local" }
+      { time: "20:30", text: "Walk back to Hotel Universal Port", mode: "Walk", modeClass: "local" }
     ],
-    meals: { breakfast: "Hotel buffet — early, before the 08:00 shuttle", lunch: "In-park — Mel's Drive-In burgers/shakes, pizza, chicken, turkey legs", dinner: "CityWalk — Hard Rock Cafe or Bubba Gump Shrimp" }
+    meals: { breakfast: "Hotel Universal Port buffet — early, before the short walk to USJ", lunch: "In-park — Mel's Drive-In burgers/shakes, pizza, chicken, turkey legs", dinner: "CityWalk — Hard Rock Cafe or Bubba Gump Shrimp" }
   },
   {
     n: 4, date: "2028-01-10", weekday: "Mon", baseId: "matsumoto", segment: "matsumoto", travelFrom: "osaka",
     title: "Osaka → Matsumoto",
     items: [
-      { time: "09:00", text: "Check out" },
-      { time: "09:15", text: "OMO7 → Shin-Osaka Station (Midosuji line direct from Dobutsuen-mae)", mode: "Midosuji line", modeClass: "local" },
+      { time: "08:45", text: "Check out" },
+      { time: "08:50", text: "Hotel Universal Port → Shin-Osaka Station by taxi/private transfer (ask hotel if a 2028 shuttle exists; otherwise taxi)", mode: "Taxi / private transfer", modeClass: "transfer" },
       { time: "09:40", text: "Shin-Osaka → Nagoya (Tokaido)", mode: "Shinkansen", modeClass: "bullet" },
       { time: "10:35", text: "Change platforms at Nagoya (~25 min)" },
       { time: "11:00", text: "Nagoya → Matsumoto (Kiso Valley)", mode: "Ltd Exp Shinano", modeClass: "limited-express" },
@@ -266,7 +266,8 @@ const days = [
       { time: "08:30", text: "Down toward Kanbayashi Onsen / Jigokudani", mode: "Resort shuttle / bus", modeClass: "coach" },
       { time: "09:30", text: "Walk the snow trail into the Snow Monkey Park (~30–40 min)", mode: "Walk", modeClass: "local" },
       { time: "10:00", text: "Monkeys (whole family)" },
-      { time: "11:45", text: "Walk out + bus back up to Shiga (~1 hr)", mode: "Bus", modeClass: "coach" },
+      { time: "11:45", text: "Walk back out to Kanbayashi trailhead (~30–40 min)", mode: "Walk", modeClass: "local" },
+      { time: "12:25", text: "Bus back up to Shiga Kogen", mode: "Bus", modeClass: "coach" },
       { time: "12:45", text: "Lunch" },
       { time: "13:30", text: "Final easy runs to round out the snow" },
       { time: "16:00", text: "Last lifts" }
@@ -281,46 +282,47 @@ const days = [
       { time: "09:15", text: "Shiga Kogen Prince → Nagano Station", mode: "Express bus", modeClass: "coach" },
       { time: "10:45", text: "Arrive Nagano; lunch" },
       { time: "12:30", text: "Nagano → Tokyo", mode: "Hokuriku Shinkansen", modeClass: "bullet" },
-      { time: "14:00", text: "Arrive Tokyo; to hotel", mode: "JR / subway or taxi", modeClass: "local" },
+      { time: "14:00", text: "Arrive Tokyo Station; Hotel East 21 shuttle/transfer if available, otherwise taxi", mode: "Shuttle / taxi", modeClass: "transfer" },
       { time: "15:00", text: "Check in" },
-      { time: "16:00", text: "Explore local area + dinner" }
+      { time: "16:00", text: "Settle in around Toyocho / Koto + easy dinner" }
     ],
-    meals: { breakfast: "Prince buffet", lunch: "Nagano-station Western café/burger before the shinkansen", dinner: "Shinjuku — Shake Shack (Southern Terrace), Sawamura, Italian or steak; or a hotel Western restaurant" }
+    meals: { breakfast: "Prince buffet", lunch: "Nagano-station Western café/burger before the shinkansen", dinner: "Hotel East 21 / Toyocho area — hotel restaurants, Italian, burger/café, or simple station-area food" }
   },
   {
     n: 11, date: "2028-01-17", weekday: "Mon", baseId: "tokyo", segment: "tokyo",
-    title: "Shinjuku / Shibuya / teamLab (+ optional Akihabara)",
+    title: "teamLab + Shibuya / Shinjuku",
     items: [
-      { time: "09:00", text: "Hotel → Kabukicho, Shinjuku (you're based here)", mode: "Walk", modeClass: "local" },
-      { time: "09:15", text: "Godzilla head (Hotel Gracery, roars on the hour)" },
-      { time: "11:00", text: "Shinjuku → Shibuya — crossing, Hachiko, shopping", mode: "JR Yamanote", modeClass: "local" },
-      { time: "13:00", text: "Lunch" },
-      { time: "14:00", text: "Shibuya → Toyosu", mode: "Train", modeClass: "local" },
-      { time: "14:30", text: "teamLab Planets, Toyosu (book a timed entry)" },
-      { time: "17:30", text: "Dinner" },
-      { time: "Option", text: "Add Akihabara (electronics/gaming/anime) — swap for teamLab or tack on late afternoon (~10–20 min away)" }
+      { time: "09:00", text: "Hotel East 21 → teamLab Planets, Toyosu (taxi or local transit)", mode: "Taxi / local transit", modeClass: "local" },
+      { time: "09:30", text: "teamLab Planets, Toyosu (book a timed entry)" },
+      { time: "11:30", text: "Toyosu / Tokyo Bay lunch" },
+      { time: "12:30", text: "Toyosu → Shibuya — crossing, Hachiko, shopping", mode: "Train", modeClass: "local" },
+      { time: "15:30", text: "Shibuya → Shinjuku / Kabukicho", mode: "JR Yamanote", modeClass: "local" },
+      { time: "16:00", text: "Godzilla head (Hotel Gracery, roars on the hour) + arcade/anime shops" },
+      { time: "18:00", text: "Dinner in Shinjuku or Shibuya" },
+      { time: "20:00", text: "Return to Hotel East 21", mode: "Subway / taxi", modeClass: "local" }
     ],
-    meals: { breakfast: "Sarabeth's (Lumine Shinjuku) — eggs Benedict, pancakes", lunch: "Shibuya — Shake Shack or Eggs 'n Things (Harajuku)", dinner: "Shibuya/Shinjuku steak (Ikinari), Italian, or American — or dinner in Akihabara if added" }
+    meals: { breakfast: "Hotel East 21 buffet or Toyocho café", lunch: "Toyosu / Ariake — mall cafés, burgers or pizza near teamLab", dinner: "Shibuya/Shinjuku — Shake Shack, steak, Italian, or American diner-style options" }
   },
   {
     n: 12, date: "2028-01-18", weekday: "Tue", baseId: "tokyo", segment: "tokyo",
     title: "Tokyo Disneyland (Land, not Sea)",
     items: [
       { time: "07:00", text: "Breakfast" },
-      { time: "07:30", text: "Hotel → Tokyo Disneyland (direct, reserve in advance)", mode: "Good Neighbor shuttle bus", modeClass: "transfer" },
-      { time: "08:30", text: "Arrive; park opens 09:00 — full day" },
+      { time: "07:00", text: "Hotel East 21 → Tokyo Disneyland (Good Neighbor shuttle; reserve in advance; current trip estimate ~30–45 min)", mode: "Good Neighbor shuttle bus", modeClass: "transfer" },
+      { time: "07:45", text: "Arrive; park opens 09:00 — full day" },
       { time: "20:00", text: "Evening parade / fireworks" },
-      { time: "21:40", text: "Disneyland → hotel (evening service, reserved)", mode: "Good Neighbor shuttle bus", modeClass: "transfer" }
+      { time: "21:10", text: "Disneyland → Hotel East 21 (evening shuttle, reserved; current trip estimate ~30–45 min)", mode: "Good Neighbor shuttle bus", modeClass: "transfer" }
     ],
-    meals: { breakfast: "Hotel buffet early (before the shuttle), or pastries", lunch: "In-park Western — burgers, pizza, chicken", dinner: "In-park table-service or counter burgers, or back in Shinjuku late" }
+    meals: { breakfast: "Hotel buffet early (before the shuttle), or pastries", lunch: "In-park Western — burgers, pizza, chicken", dinner: "In-park table-service or counter burgers; snack back near Toyocho if needed" }
   },
   {
     n: 13, date: "2028-01-19", weekday: "Wed", baseId: "tokyo", segment: "tokyo", travelTo: "haneda",
     title: "Fly home",
     items: [
-      { time: "09:00", text: "Check out, store bags for the day" },
-      { time: "Day", text: "Final bits around Tokyo" },
-      { time: "18:00", text: "To the airport — Haneda (Monorail/Keikyu ~40 min) or Narita (N'EX ~75 min)", mode: "Airport transfer", modeClass: "transfer" },
+      { time: "09:00", text: "Check out, store bags at Hotel East 21" },
+      { time: "10:00", text: "Final easy Tokyo morning — Ginza / Tokyo Station shopping and lunch", mode: "Subway / taxi", modeClass: "local" },
+      { time: "16:30", text: "Return to hotel, collect bags" },
+      { time: "17:00", text: "To the airport — Haneda by taxi or subway + airport rail; Narita if flights change", mode: "Airport transfer", modeClass: "transfer" },
       { time: "20:30", text: "Tokyo → Brisbane (overnight, ~9 hr)", mode: "Flight", modeClass: "flight" },
       { time: "~07:00", text: "Land Brisbane (Thu 20 Jan)" }
     ],
@@ -334,27 +336,30 @@ const days = [
 const dayMaps = {
   1: { stops: [
     { time: "19:45", label: "Kansai Airport", kind: "airport", coords: [34.4342, 135.2333], mode: "Jetstar JQ23", modeClass: "flight" },
-    { time: "21:45", label: "OMO7 Osaka", kind: "hotel", coords: [34.6500, 135.5000], mode: "Private transfer / taxi", modeClass: "transfer", durationMin: 60, detail: "Shin-Imamiya — free USJ shuttle hotel" }
+    { time: "21:45", label: "Hotel Universal Port", kind: "hotel", coords: [34.6674, 135.4367], mode: "Private transfer / taxi", modeClass: "transfer", durationMin: 60, detail: "Universal City — beside the Captain Line pier" }
   ]},
   2: { stops: [
-    { time: "09:00", label: "OMO7 Osaka", kind: "hotel", coords: [34.6500, 135.5000], detail: "Relaxed breakfast" },
-    { time: "09:45", label: "Shinsekai / Tsutenkaku", kind: "attraction", coords: [34.6525, 135.5063], mode: "Walk", modeClass: "local", durationMin: 10, detail: "Retro Osaka + Tsutenkaku Tower" },
-    { time: "10:45", label: "Abeno Harukas 300", kind: "attraction", coords: [34.6458, 135.5138], mode: "Walk / 1 stop", modeClass: "local", durationMin: 15, detail: "Observation deck — Japan's tallest building" },
-    { time: "12:00", label: "Tennoji / Abeno lunch", kind: "food", coords: [34.6462, 135.5130], mode: "Walk", modeClass: "local", durationMin: 5, detail: "Café, burger, or Harukas dining floors" },
-    { time: "14:00", label: "Kaiyukan Aquarium", kind: "attraction", coords: [34.6545, 135.4290], mode: "Chuo line to Osakako", modeClass: "local", durationMin: 35 },
-    { time: "16:30", label: "Tempozan Ferris wheel", kind: "activity", coords: [34.6558, 135.4288], mode: "Walk", modeClass: "local", durationMin: 5, detail: "Giant wheel + harbour, next to the aquarium" },
-    { time: "18:00", label: "Dotonbori dinner", kind: "food", coords: [34.6687, 135.5013], mode: "Midosuji to Namba", modeClass: "local", durationMin: 30, detail: "Burgers, Italian, pizza or steak" }
+    { time: "09:00", label: "Hotel Universal Port", kind: "hotel", coords: [34.6674, 135.4367], detail: "Relaxed breakfast" },
+    { time: "09:40", label: "Universal City Port", kind: "station", coords: [34.6662, 135.4360], mode: "Walk", modeClass: "local", durationMin: 5, detail: "Captain Line pier behind the hotel" },
+    { time: "10:00", label: "Kaiyukan West Wharf", kind: "station", coords: [34.6530, 135.4290], mode: "Captain Line ferry", modeClass: "coach", durationMin: 10, via: [[34.6625, 135.4342], [34.6574, 135.4310]], detail: "Direct ferry across Osaka Bay; timetable varies" },
+    { time: "10:15", label: "Kaiyukan Aquarium", kind: "attraction", coords: [34.6545, 135.4290], mode: "Walk", modeClass: "local", durationMin: 5, detail: "Unhurried aquarium visit" },
+    { time: "13:00", label: "Tempozan Marketplace", kind: "food", coords: [34.6553, 135.4295], mode: "Walk", modeClass: "local", durationMin: 3, detail: "Lunch at Naniwa Kuishinbo Yokocho or the food court" },
+    { time: "14:00", label: "Tempozan Harbor Village", kind: "activity", coords: [34.6551, 135.4292], mode: "Walk", modeClass: "local", durationMin: 3, detail: "Flexible: LEGOLAND, Anipa, shops, arcade, or waterfront" },
+    { time: "16:30", label: "Tempozan Ferris Wheel", kind: "activity", coords: [34.6558, 135.4288], mode: "Walk", modeClass: "local", durationMin: 3, detail: "Giant wheel over Osaka Bay" },
+    { time: "17:20", label: "Kaiyukan West Wharf", kind: "station", coords: [34.6530, 135.4290], mode: "Walk", modeClass: "local", durationMin: 5, detail: "Return to the Captain Line pier" },
+    { time: "17:30", label: "Universal City Port", kind: "station", coords: [34.6662, 135.4360], mode: "Captain Line ferry", modeClass: "coach", durationMin: 10, via: [[34.6574, 135.4310], [34.6625, 135.4342]], detail: "Return ferry to Universal City" },
+    { time: "18:00", label: "Universal CityWalk", kind: "food", coords: [34.6678, 135.4380], mode: "Walk", modeClass: "local", durationMin: 5, detail: "Easy dinner near the hotel" }
   ]},
   3: { stops: [
-    { time: "07:00", label: "OMO7 Osaka", kind: "hotel", coords: [34.6500, 135.5000], detail: "Early hotel buffet before the shuttle" },
-    { time: "08:00", label: "Universal Studios", kind: "attraction", coords: [34.6654, 135.4323], mode: "Free USJ shuttle bus", modeClass: "transfer", durationMin: 30, detail: "Direct hotel shuttle — reserve ahead" },
+    { time: "07:00", label: "Hotel Universal Port", kind: "hotel", coords: [34.6674, 135.4367], detail: "Early hotel buffet" },
+    { time: "08:15", label: "Universal Studios", kind: "attraction", coords: [34.6654, 135.4323], mode: "Walk", modeClass: "local", durationMin: 8, detail: "Easy walk to the park entrance" },
     { time: "12:30", label: "Mel's / in-park food", kind: "food", coords: [34.6662, 135.4328], mode: "Walk in park", modeClass: "local", durationMin: 5, detail: "Burgers, shakes, pizza or chicken" },
     { time: "19:00", label: "Universal CityWalk", kind: "food", coords: [34.6678, 135.4380], mode: "Walk to CityWalk", modeClass: "local", durationMin: 8, detail: "Hard Rock Cafe or Bubba Gump" },
-    { time: "20:30", label: "OMO7 Osaka", kind: "hotel", coords: [34.6500, 135.5000], mode: "JR back via Nishikujo", modeClass: "local", durationMin: 30, via: [[34.6827, 135.4657]], detail: "Free shuttle's last return is 18:50, so JR home after dinner" }
+    { time: "20:30", label: "Hotel Universal Port", kind: "hotel", coords: [34.6674, 135.4367], mode: "Walk", modeClass: "local", durationMin: 5, detail: "Short walk back after dinner" }
   ]},
   4: { stops: [
-    { time: "09:00", label: "OMO7 Osaka", kind: "hotel", coords: [34.6500, 135.5000] },
-    { time: "09:40", label: "Shin-Osaka Station", kind: "station", coords: [34.7335, 135.5002], mode: "Midosuji line (from Dobutsuen-mae)", modeClass: "local", durationMin: 17 },
+    { time: "08:50", label: "Hotel Universal Port", kind: "hotel", coords: [34.6674, 135.4367], detail: "Check out; no direct Shin-Osaka shuttle found in current hotel access info" },
+    { time: "09:20", label: "Shin-Osaka Station", kind: "station", coords: [34.7335, 135.5002], mode: "Taxi / private transfer", modeClass: "transfer", durationMin: 30, detail: "Door-to-station with luggage; ask hotel to book ahead" },
     { time: "10:35", label: "Nagoya Station", kind: "station", coords: [35.1706, 136.8816], mode: "Tokaido Shinkansen", modeClass: "bullet", durationMin: 50, railKey: "tokaido_shin_osaka_nagoya" },
     { time: "13:00", label: "Matsumoto Station", kind: "station", coords: [36.2300, 137.9640], mode: "Ltd Exp Shinano", modeClass: "limited-express", durationMin: 120, railKey: "chuo_nagoya_matsumoto" },
     { time: "13:15", label: "Richmond Hotel Matsumoto", kind: "hotel", coords: [36.2318, 137.9678], mode: "Walk / short taxi", modeClass: "local", durationMin: 8, detail: "Drop bags — 4 min from the station, near the castle" },
@@ -392,7 +397,8 @@ const dayMaps = {
     { time: "08:30", label: "Prince West Wing", kind: "hotel", coords: [36.7130, 138.5000] },
     { time: "09:00", label: "Kanbayashi trailhead", kind: "station", coords: [36.7332, 138.4265], mode: "Resort shuttle / bus", modeClass: "coach", durationMin: 35 },
     { time: "10:00", label: "Snow Monkey Park", kind: "attraction", coords: [36.7325, 138.4620], mode: "Snow trail walk", modeClass: "local", durationMin: 35 },
-    { time: "12:45", label: "Mountain lunch", kind: "food", coords: [36.7180, 138.5030], mode: "Walk + bus", modeClass: "coach", durationMin: 60 },
+    { time: "12:20", label: "Kanbayashi trailhead", kind: "station", coords: [36.7332, 138.4265], mode: "Snow trail walk", modeClass: "local", durationMin: 35, detail: "Walk back out from the monkey park" },
+    { time: "12:45", label: "Mountain lunch", kind: "food", coords: [36.7180, 138.5030], mode: "Bus back up to Shiga", modeClass: "coach", durationMin: 25 },
     { time: "13:30", label: "Final runs", kind: "activity", coords: [36.7240, 138.5090], mode: "Ski / lift", modeClass: "local", durationMin: 10 }
   ]},
   10: { stops: [
@@ -400,28 +406,30 @@ const dayMaps = {
     { time: "10:45", label: "Nagano Station", kind: "station", coords: [36.6430, 138.1890], mode: "Express bus", modeClass: "coach", durationMin: 80 },
     { time: "11:00", label: "Nagano station lunch", kind: "food", coords: [36.6424, 138.1880], mode: "Walk", modeClass: "local", durationMin: 5, detail: "Western cafe or burger" },
     { time: "14:00", label: "Tokyo Station", kind: "station", coords: [35.6812, 139.7671], mode: "Hokuriku Shinkansen", modeClass: "bullet", durationMin: 90, railKey: "hokuriku_nagano_tokyo" },
-    { time: "15:00", label: "Shinjuku hotel", kind: "hotel", coords: [35.6906, 139.6948], mode: "JR / subway or taxi", modeClass: "local", durationMin: 25 },
-    { time: "18:00", label: "Shinjuku dinner", kind: "food", coords: [35.6897, 139.7005], mode: "Walk", modeClass: "local", durationMin: 10, detail: "Shake Shack, Sawamura, Italian or steak" }
+    { time: "15:00", label: "Hotel East 21 Tokyo", kind: "hotel", coords: [35.6741, 139.8175], mode: "Shuttle / taxi", modeClass: "transfer", durationMin: 25, detail: "Ask hotel about a Tokyo Station transfer; if unavailable, take a taxi with luggage" },
+    { time: "18:00", label: "Toyocho dinner", kind: "food", coords: [35.6696, 139.8171], mode: "Walk / short taxi", modeClass: "local", durationMin: 10, detail: "Hotel restaurants or easy station-area food" }
   ]},
   11: { stops: [
-    { time: "08:00", label: "Sarabeth's breakfast", kind: "food", coords: [35.6895, 139.7007], detail: "Eggs Benedict or pancakes" },
-    { time: "09:15", label: "Godzilla Head", kind: "attraction", coords: [35.6955, 139.7020], mode: "Walk", modeClass: "local", durationMin: 15 },
-    { time: "11:00", label: "Shibuya Crossing", kind: "attraction", coords: [35.6595, 139.7005], mode: "JR Yamanote", modeClass: "local", durationMin: 20, railKey: "yamanote_shinjuku_shibuya" },
-    { time: "13:00", label: "Shibuya lunch", kind: "food", coords: [35.6620, 139.7020], mode: "Walk", modeClass: "local", durationMin: 10, detail: "Shake Shack or Eggs 'n Things" },
-    { time: "14:30", label: "teamLab Planets", kind: "attraction", coords: [35.6494, 139.7897], mode: "Local train", modeClass: "local", durationMin: 35, via: [[35.6655, 139.7126], [35.6707, 139.7508], [35.6550, 139.7925]] },
-    { time: "17:30", label: "Shinjuku dinner", kind: "food", coords: [35.6897, 139.7005], mode: "Train", modeClass: "local", durationMin: 35, detail: "Steak, Italian or American" }
+    { time: "08:00", label: "Hotel East 21 Tokyo", kind: "hotel", coords: [35.6741, 139.8175], detail: "Breakfast at the hotel or Toyocho cafe" },
+    { time: "09:30", label: "teamLab Planets", kind: "attraction", coords: [35.6494, 139.7897], mode: "Taxi / local transit", modeClass: "local", durationMin: 25, detail: "Book a timed morning entry" },
+    { time: "11:30", label: "Toyosu lunch", kind: "food", coords: [35.6550, 139.7925], mode: "Walk / local transit", modeClass: "local", durationMin: 10, detail: "Mall cafes, burgers or pizza" },
+    { time: "13:00", label: "Shibuya Crossing", kind: "attraction", coords: [35.6595, 139.7005], mode: "Train", modeClass: "local", durationMin: 35, via: [[35.6707, 139.7508], [35.6655, 139.7126]] },
+    { time: "15:30", label: "Godzilla Head", kind: "attraction", coords: [35.6955, 139.7020], mode: "JR Yamanote", modeClass: "local", durationMin: 20, via: [[35.6580, 139.7016], [35.6633, 139.7015], [35.6705, 139.7024], [35.6815, 139.7029], [35.6895, 139.7002]] },
+    { time: "18:00", label: "Shinjuku dinner", kind: "food", coords: [35.6897, 139.7005], mode: "Walk", modeClass: "local", durationMin: 10, detail: "Steak, Italian or American" },
+    { time: "20:00", label: "Hotel East 21 Tokyo", kind: "hotel", coords: [35.6741, 139.8175], mode: "Subway / taxi", modeClass: "local", durationMin: 35 }
   ]},
   12: { stops: [
-    { time: "07:00", label: "Shinjuku hotel", kind: "hotel", coords: [35.6906, 139.6948], detail: "Early buffet or pastries" },
-    { time: "08:30", label: "Tokyo Disneyland", kind: "attraction", coords: [35.6329, 139.8804], mode: "Good Neighbor shuttle", modeClass: "transfer", durationMin: 60 },
+    { time: "07:00", label: "Hotel East 21 Tokyo", kind: "hotel", coords: [35.6741, 139.8175], detail: "Early buffet or pastries" },
+    { time: "07:45", label: "Tokyo Disneyland", kind: "attraction", coords: [35.6329, 139.8804], mode: "Good Neighbor shuttle", modeClass: "transfer", durationMin: 45, detail: "Official estimate is about 30-45 min; reserve the guest shuttle in advance" },
     { time: "12:30", label: "Disneyland lunch", kind: "food", coords: [35.6323, 139.8806], mode: "Walk", modeClass: "local", durationMin: 5, detail: "Burgers, pizza or chicken" },
     { time: "18:30", label: "Disneyland dinner", kind: "food", coords: [35.6315, 139.8814], mode: "Walk", modeClass: "local", durationMin: 5, detail: "Table service or counter burgers" },
-    { time: "21:40", label: "Shinjuku hotel", kind: "hotel", coords: [35.6906, 139.6948], mode: "Reserved hotel shuttle", modeClass: "transfer", durationMin: 60 }
+    { time: "21:10", label: "Hotel East 21 Tokyo", kind: "hotel", coords: [35.6741, 139.8175], mode: "Reserved hotel shuttle", modeClass: "transfer", durationMin: 45, detail: "Current posted return from Disneyland is 21:10; allow 30-45 min" }
   ]},
   13: { stops: [
-    { time: "09:00", label: "Shinjuku hotel", kind: "hotel", coords: [35.6906, 139.6948] },
-    { time: "Day", label: "Final Tokyo stop", kind: "attraction", coords: [35.6897, 139.7005], mode: "Walk / local train", modeClass: "local", durationMin: 10, detail: "Flexible until flights are confirmed" },
-    { time: "17:00", label: "Airport meal options", kind: "food", coords: [35.5494, 139.7798], mode: "Monorail / Keikyu", modeClass: "transfer", durationMin: 40, detail: "Western cafes and restaurants at Haneda" },
+    { time: "09:00", label: "Hotel East 21 Tokyo", kind: "hotel", coords: [35.6741, 139.8175] },
+    { time: "10:00", label: "Ginza / Tokyo Station", kind: "attraction", coords: [35.6764, 139.7657], mode: "Subway / taxi", modeClass: "local", durationMin: 20, detail: "Easy final shopping and lunch before collecting bags" },
+    { time: "16:30", label: "Hotel East 21 Tokyo", kind: "hotel", coords: [35.6741, 139.8175], mode: "Return for bags", modeClass: "local", durationMin: 25 },
+    { time: "17:00", label: "Airport meal options", kind: "food", coords: [35.5494, 139.7798], mode: "Taxi / airport rail", modeClass: "transfer", durationMin: 45, detail: "Western cafes and restaurants at Haneda" },
     { time: "18:00", label: "Haneda Airport", kind: "airport", coords: [35.5494, 139.7798], mode: "Airport rail", modeClass: "transfer", durationMin: 5 }
   ]}
 };
@@ -440,7 +448,7 @@ const budget = [
   { id: "b10", category: "Theme parks",   label: "Disneyland entry ×4",                                  planned: 290,  actual: null },
   { id: "b11", category: "Theme parks",   label: "Disneyland Premier Access",                            planned: 150,  actual: null },
   { id: "b12", category: "Food",          label: "Theme-park food (2 days ×4)",                          planned: 320,  actual: null },
-  { id: "b13", category: "Activities",    label: "Other entries (teamLab, Kaiyukan, Abeno Harukas, monkeys)", planned: 450, actual: null },
+  { id: "b13", category: "Activities",    label: "Other entries (teamLab, Kaiyukan, Tempozan options, monkeys)", planned: 450, actual: null },
   { id: "b14", category: "Food",          label: "City / non-park meals ×4",                             planned: 1300, actual: null }
   // Pre-bookable subtotal ≈ A$17,000. Incidentals / spending money (~$2,000–3,000) tracked separately, on top.
 ];

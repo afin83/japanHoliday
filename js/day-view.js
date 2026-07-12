@@ -213,12 +213,10 @@ const DayView = (() => {
     const isFoot = /walk/.test(modeText);
     let points;
     try {
-      if (isRail && b.railKey && typeof railGeometry !== "undefined" && railGeometry[b.railKey]) {
-        points = railGeometry[b.railKey];
-      } else if (isRail && Array.isArray(b.via) && b.via.length) {
-        // Short urban lines can use curated station geometry when no complete
-        // OpenStreetMap railway relation is attached to the stop.
+      if (Array.isArray(b.via) && b.via.length) {
         points = [a.coords, ...b.via, b.coords];
+      } else if (isRail && b.railKey && typeof railGeometry !== "undefined" && railGeometry[b.railKey]) {
+        points = railGeometry[b.railKey];
       } else if (isRail) {
         const request = {
           locations: [

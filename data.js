@@ -70,11 +70,11 @@ const locations = [
   },
   {
     id: "osaka", name: "Osaka", type: "base", segment: "osaka",
-    coords: [34.6656, 135.5006],
+    coords: [34.7046, 135.4961],
     arrive: "2028-01-07", depart: "2028-01-10", nights: 3,
     summary: "Arrival city — Universal Studios Japan plus an easy recovery day.",
     weather: { high: 9, low: 3, icon: "sun", desc: "Cold but mild for Japan — dry and often sunny, with occasional light rain. ~5 hrs of sun a day." },
-    hotelNote: "Central base (Namba / Shinsaibashi): Day 2 sights on the doorstep; quick JR to Universal. Or a Good-value USJ-shuttle hotel like OMO7 if you'd rather ride door-to-door on the park day.",
+    hotelNote: "Working hotel: Hotel Hankyu RESPIRE Osaka in Umeda / Osaka Station. Better balance for Universal Studios Japan via JR, easy Day 2 exploring, and a simple Day 4 hop to Shin-Osaka with luggage.",
     poi: [
       { name: "Universal Studios Japan", coords: [34.6654, 135.4323] },
       { name: "Osaka Castle",            coords: [34.6873, 135.5259] },
@@ -173,18 +173,18 @@ const days = [
       { time: "16:30", text: "→ Namba / Shinsaibashi", mode: "Metro/subway", modeClass: "local" },
       { time: "17:00", text: "Dotonbori — street food, lights, dinner" }
     ],
-    meals: { breakfast: "Hotel buffet, or Eggs 'n Things (Shinsaibashi) Hawaiian pancakes", lunch: "Café/burger near the Castle or Kaiyukan", dinner: "Dotonbori — burgers, pizza/Italian, or steak" }
+    meals: { breakfast: "Hotel buffet or an easy Umeda café before heading out", lunch: "Café/burger near the Castle or Kaiyukan", dinner: "Dotonbori — burgers, pizza/Italian, or steak" }
   },
   {
     n: 3, date: "2028-01-09", weekday: "Sun", baseId: "osaka", segment: "osaka",
     title: "Universal Studios Japan",
     items: [
       { time: "07:30", text: "Breakfast" },
-      { time: "08:00", text: "Hotel → Universal City (JR Yumesaki line), or taxi", mode: "Train", modeClass: "local" },
+      { time: "08:00", text: "Hotel → Osaka Station → Nishikujo → Universal City", mode: "JR trains", modeClass: "local" },
       { time: "09:00", text: "Park opens — straight to Super Nintendo World" },
       { time: "12:30", text: "Lunch in park" },
       { time: "19:00", text: "Dinner at Universal CityWalk" },
-      { time: "21:00", text: "Back to hotel", mode: "Train", modeClass: "local" }
+      { time: "21:00", text: "Universal City → Osaka Station / Umeda hotel", mode: "JR trains", modeClass: "local" }
     ],
     meals: { breakfast: "Hotel buffet", lunch: "In-park — Mel's Drive-In burgers/shakes, pizza, chicken, turkey legs", dinner: "CityWalk — Hard Rock Cafe or Bubba Gump Shrimp" }
   },
@@ -193,7 +193,7 @@ const days = [
     title: "Osaka → Matsumoto",
     items: [
       { time: "09:00", text: "Check out" },
-      { time: "09:15", text: "Hotel → Shin-Osaka Station", mode: "Taxi", modeClass: "transfer" },
+      { time: "09:15", text: "Hotel → Shin-Osaka Station", mode: "JR / Midosuji line", modeClass: "local" },
       { time: "09:40", text: "Shin-Osaka → Nagoya (Tokaido)", mode: "Shinkansen", modeClass: "bullet" },
       { time: "10:35", text: "Change platforms at Nagoya (~25 min)" },
       { time: "11:00", text: "Nagoya → Matsumoto (Kiso Valley)", mode: "Ltd Exp Shinano", modeClass: "limited-express" },
@@ -331,26 +331,28 @@ const days = [
 const dayMaps = {
   1: { stops: [
     { time: "19:45", label: "Kansai Airport", kind: "airport", coords: [34.4342, 135.2333], mode: "Jetstar JQ23", modeClass: "flight" },
-    { time: "21:45", label: "Osaka hotel area", kind: "hotel", coords: [34.6687, 135.5013], mode: "Private transfer / taxi", modeClass: "transfer", durationMin: 55, detail: "Namba / Shinsaibashi — exact hotel TBD" }
+    { time: "21:45", label: "Hotel Hankyu RESPIRE Osaka", kind: "hotel", coords: [34.7046, 135.4961], mode: "Private transfer / taxi", modeClass: "transfer", durationMin: 60, detail: "Umeda / Osaka Station — working Osaka hotel" }
   ]},
   2: { stops: [
-    { time: "09:30", label: "Osaka hotel area", kind: "hotel", coords: [34.6687, 135.5013] },
+    { time: "09:30", label: "Hotel Hankyu RESPIRE Osaka", kind: "hotel", coords: [34.7046, 135.4961] },
     { time: "10:00", label: "Osaka Castle", kind: "attraction", coords: [34.6873, 135.5259], mode: "Tanimachi metro", modeClass: "local", durationMin: 25 },
     { time: "12:00", label: "Castle lunch area", kind: "food", coords: [34.6860, 135.5240], mode: "Walk", modeClass: "local", durationMin: 5, detail: "Cafe or burger near the castle" },
     { time: "13:30", label: "Kaiyukan Aquarium", kind: "attraction", coords: [34.6545, 135.4290], mode: "Chuo metro", modeClass: "local", durationMin: 35 },
     { time: "17:00", label: "Dotonbori dinner", kind: "food", coords: [34.6687, 135.5013], mode: "Metro to Namba", modeClass: "local", durationMin: 30, detail: "Burgers, Italian, pizza or steak" }
   ]},
   3: { stops: [
-    { time: "07:30", label: "Osaka hotel", kind: "hotel", coords: [34.6687, 135.5013], detail: "Hotel buffet breakfast" },
-    { time: "08:00", label: "Nishikujo Station", kind: "station", coords: [34.6827, 135.4657], mode: "JR transfer", modeClass: "local", durationMin: 20 },
-    { time: "09:00", label: "Universal Studios", kind: "attraction", coords: [34.6654, 135.4323], mode: "JR Yumesaki line", modeClass: "local", durationMin: 6, via: [[34.6736, 135.4430], [34.6678, 135.4380]] },
+    { time: "07:30", label: "Hotel Hankyu RESPIRE Osaka", kind: "hotel", coords: [34.7046, 135.4961], detail: "Hotel buffet breakfast" },
+    { time: "08:08", label: "Osaka Station", kind: "station", coords: [34.7025, 135.4959], mode: "Walk", modeClass: "local", durationMin: 8 },
+    { time: "08:20", label: "Nishikujo Station", kind: "station", coords: [34.6827, 135.4657], mode: "JR Osaka Loop line", modeClass: "local", durationMin: 6 },
+    { time: "08:30", label: "Universal Studios", kind: "attraction", coords: [34.6654, 135.4323], mode: "JR Yumesaki line", modeClass: "local", durationMin: 6, via: [[34.6736, 135.4430], [34.6678, 135.4380]] },
     { time: "12:30", label: "Mel's / in-park food", kind: "food", coords: [34.6662, 135.4328], mode: "Walk", modeClass: "local", durationMin: 5, detail: "Burgers, shakes, pizza or chicken" },
     { time: "19:00", label: "Universal CityWalk", kind: "food", coords: [34.6678, 135.4380], mode: "Walk", modeClass: "local", durationMin: 10, detail: "Hard Rock Cafe or Bubba Gump" },
-    { time: "21:00", label: "Osaka hotel", kind: "hotel", coords: [34.6687, 135.5013], mode: "JR train", modeClass: "local", durationMin: 25 }
+    { time: "21:00", label: "Nishikujo Station", kind: "station", coords: [34.6827, 135.4657], mode: "JR Yumesaki line", modeClass: "local", durationMin: 6 },
+    { time: "21:15", label: "Hotel Hankyu RESPIRE Osaka", kind: "hotel", coords: [34.7046, 135.4961], mode: "JR Osaka Loop line + walk", modeClass: "local", durationMin: 15 }
   ]},
   4: { stops: [
-    { time: "09:00", label: "Osaka hotel", kind: "hotel", coords: [34.6687, 135.5013] },
-    { time: "09:40", label: "Shin-Osaka Station", kind: "station", coords: [34.7335, 135.5002], mode: "Taxi", modeClass: "transfer", durationMin: 25 },
+    { time: "09:00", label: "Hotel Hankyu RESPIRE Osaka", kind: "hotel", coords: [34.7046, 135.4961] },
+    { time: "09:40", label: "Shin-Osaka Station", kind: "station", coords: [34.7335, 135.5002], mode: "JR / Midosuji line", modeClass: "local", durationMin: 15 },
     { time: "10:35", label: "Nagoya Station", kind: "station", coords: [35.1706, 136.8816], mode: "Tokaido Shinkansen", modeClass: "bullet", durationMin: 50, railKey: "tokaido_shin_osaka_nagoya" },
     { time: "13:00", label: "Matsumoto Station", kind: "station", coords: [36.2300, 137.9640], mode: "Ltd Exp Shinano", modeClass: "limited-express", durationMin: 120, railKey: "chuo_nagoya_matsumoto" },
     { time: "13:30", label: "Matsumoto lunch", kind: "food", coords: [36.2312, 137.9662], mode: "Walk", modeClass: "local", durationMin: 5, detail: "Pizza Verde or local burger" },

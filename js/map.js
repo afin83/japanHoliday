@@ -5,6 +5,7 @@
 
 const MapView = (() => {
   let map;
+  const routeLayer = L.layerGroup();
   const markers = {};   // locationId -> Leaflet marker
   const poiLayer = L.layerGroup();
   const lines = [];     // { leg, layer }
@@ -24,6 +25,18 @@ const MapView = (() => {
 
   function segColor(segKey) {
     return (segments[segKey] && segments[segKey].color) || segments.transit.color;
+  }
+
+  function compactDuration(min) {
+    if (min == null || Number.isNaN(min)) return "";
+    if (min < 60) return `${Math.round(min)}min`;
+    const hours = min / 60;
+    return `${Number.isInteger(hours) ? hours : hours.toFixed(1)}hr`;
+  }
+
+  function transportLabel(leg) {
+    const duration = compactDuration(leg.durationMin);
+    return duration ? `${leg.mode} · ${duration}` : leg.mode;
   }
 
   /* Base pins are numbered in route order; others get a small dot. */
@@ -57,6 +70,7 @@ const MapView = (() => {
     });
     // Establish a view immediately so Leaflet "loads" and renders tiles/markers.
     map.setView([36.2, 138.2], 6);
+    routeLayer.addTo(map);
 
     const tiles = L.tileLayer(
       "https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png",
@@ -108,7 +122,7 @@ const MapView = (() => {
         weight: style.weight + 3,
         opacity: 0.85,
         lineCap: "round",
-      }).addTo(map);
+      }).addTo(routeLayer);
 
       const layer = L.polyline([from.coords, to.coords], {
         color,
@@ -117,14 +131,20 @@ const MapView = (() => {
         dashArray: style.dashArray,
         lineCap: "round",
         className: "route-line",
-      }).addTo(map);
+      }).addTo(routeLayer);
+      layer.bindTooltip(transportLabel(leg), {
+        permanent: true,
+        direction: "center",
+        className: `transport-label transport-label--${leg.modeClass || "local"}`,
+        opacity: 1
+      });
 
       // Fat invisible hit-area so lines are easy to tap on a phone.
       const hit = L.polyline([from.coords, to.coords], {
         color: "#000",
         weight: 22,
         opacity: 0,
-      }).addTo(map);
+      }).addTo(routeLayer);
       hit.on("click", () => Sheets.openLeg(leg.id));
       layer.on("click", () => Sheets.openLeg(leg.id));
 
@@ -142,7 +162,7 @@ const MapView = (() => {
         title: loc.name,
         riseOnHover: true,
         zIndexOffset: loc.type === "base" ? 400 : 0,
-      }).addTo(map);
+      }).addTo(routeLayer);
       marker.on("click", () => Sheets.openLocation(loc.id));
       markers[loc.id] = marker;
     }
@@ -161,7 +181,9 @@ const MapView = (() => {
           iconAnchor: [6.5, 6.5],
         }),
         title: p.name,
-      }).bindTooltip(p.name, { direction: "top", offset: [0, -8], className: "poi-tip" });
+      })
+        .bindTooltip(p.name, { direction: "top", offset: [0, -8], className: "poi-tip" })
+        .bindPopup(`<b>${escapeHtml(p.name)}</b><br>${googleSearchLinkHtml(`${p.name} Japan`)}`);
       poiLayer.addLayer(m);
     }
   }
@@ -225,10 +247,19 @@ const MapView = (() => {
     if (map) map.invalidateSize();
   }
 
+  function showRoute(show) {
+    if (!map) return;
+    if (show && !map.hasLayer(routeLayer)) routeLayer.addTo(map);
+    if (!show && map.hasLayer(routeLayer)) map.removeLayer(routeLayer);
+    if (!show) deselect();
+  }
+
+  function getMap() { return map; }
+
   return {
     init, fitAll, invalidate,
     selectLocation, deselect,
     highlightLeg, clearLegHighlight,
-    byId,
+    byId, showRoute, getMap,
   };
 })();

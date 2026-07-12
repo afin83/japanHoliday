@@ -150,6 +150,8 @@ const Sheets = (() => {
 
     if (loc.summary) elBody.appendChild(el("p", { class: "summary-line", text: loc.summary }));
 
+    elBody.appendChild(googleSearchLink(`${loc.name} Japan`));
+
     const weather = weatherBlock(loc);
     if (weather) elBody.appendChild(weather);
 

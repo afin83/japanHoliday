@@ -58,6 +58,33 @@ const Fmt = {
   },
 };
 
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
+function googleSearchUrl(query) {
+  return "https://www.google.com/search?q=" + encodeURIComponent(String(query || "").trim());
+}
+
+function googleSearchLink(query, label = "Search on Google") {
+  return el("a", {
+    class: "google-search-link",
+    href: googleSearchUrl(query),
+    target: "_blank",
+    rel: "noopener noreferrer",
+    text: label
+  });
+}
+
+function googleSearchLinkHtml(query, label = "Search on Google") {
+  return `<a class="google-search-link" href="${googleSearchUrl(query)}" target="_blank" rel="noopener noreferrer">${escapeHtml(label)}</a>`;
+}
+
 /* Tiny DOM builder: el("div", {class:"x"}, [child, "text"]) */
 function el(tag, attrs = {}, children = []) {
   const node = document.createElement(tag);

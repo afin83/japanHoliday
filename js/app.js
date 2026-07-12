@@ -43,7 +43,7 @@ const App = (() => {
   function onTab(view) {
     if (view === "map") {
       if (activeClose) closeOverlay(false);
-      MapView.fitAll();
+      if (!document.body.classList.contains("is-day-view")) MapView.fitAll();
       setActiveTab("map");
       return;
     }
@@ -88,6 +88,20 @@ const App = (() => {
 
   /* ---------- wiring ---------- */
   function wire() {
+    document.querySelectorAll("[data-map-mode]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const mode = btn.dataset.mapMode;
+        document.querySelectorAll("[data-map-mode]").forEach((other) => {
+          const on = other.dataset.mapMode === mode;
+          other.classList.toggle("is-active", on);
+          other.setAttribute("aria-pressed", String(on));
+        });
+        if (activeClose) closeOverlay(false);
+        document.getElementById("legendToggle").hidden = mode === "day";
+        document.getElementById("legend").hidden = true;
+        if (mode === "day") DayView.show(); else DayView.hide();
+      });
+    });
     document.querySelectorAll(".tabbar__btn").forEach((btn) => {
       btn.addEventListener("click", () => onTab(btn.dataset.view));
     });

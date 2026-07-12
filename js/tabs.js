@@ -1,6 +1,6 @@
 /* =============================================================================
-   tabs.js — full-screen panels: Budget, Checklists, Bookings.
-   User edits (ticks, actual spend) persist via Store.
+   tabs.js - full-screen panels: Budget, Itinerary, Bookings.
+   User edits for actual spend persist via Store.
 ============================================================================= */
 
 const Tabs = (() => {
@@ -35,9 +35,8 @@ const Tabs = (() => {
     hero.appendChild(el("div", { class: "budget-hero__bar" }, [fill]));
     panelBody.appendChild(hero);
     panelBody.appendChild(el("p", { class: "summary-line", style: "margin-top:12px",
-      text: `Target for the whole trip ≈ ${Fmt.money(TARGET)}. Incidentals / spending money sit on top of the figures below.` }));
+      text: `Target for the whole trip approx ${Fmt.money(TARGET)}. Incidentals / spending money sit on top of the figures below.` }));
 
-    // group by category, preserving first-seen order
     const cats = [];
     const catMap = {};
     for (const b of budget) {
@@ -59,7 +58,7 @@ const Tabs = (() => {
           inputmode: "decimal",
           min: "0",
           "aria-label": "Actual spend for " + b.label,
-          placeholder: "—",
+          placeholder: "-",
         });
         const saved = Store.getActual(b.id);
         if (saved != null) input.value = saved;
@@ -82,75 +81,57 @@ const Tabs = (() => {
       let actual = 0;
       for (const b of budget) { const a = Store.getActual(b.id); if (a != null) actual += a; }
       heroPlanned.textContent = Fmt.money(planned);
-      heroActual.textContent = actual > 0 ? Fmt.money(actual) : "—";
+      heroActual.textContent = actual > 0 ? Fmt.money(actual) : "-";
       fill.style.width = Math.min(100, (actual / TARGET) * 100) + "%";
       for (const cat of cats) {
         const items = catMap[cat];
         const p = items.reduce((s, b) => s + (b.planned || 0), 0);
         let a = 0, any = false;
-        for (const b of items) { const v = Store.getActual(b.id); if (v != null) { a += v; any = true; } }
+        for (const b of items) {
+          const v = Store.getActual(b.id);
+          if (v != null) { a += v; any = true; }
+        }
         catTotalEls[cat].textContent = any ? `${Fmt.money(a)} / ${Fmt.money(p)}` : Fmt.money(p);
       }
     }
     recompute();
   }
 
-  /* ---------------- Checklists ---------------- */
-  function checklists_() {
+  /* ---------------- Itinerary ---------------- */
+  function itinerary_() {
     panelBody.innerHTML = "";
-    const listWrap = el("div", {});
-    const toggle = el("div", { class: "seg-toggle" });
-    const btnPack = el("button", { type: "button", text: `Packing (${checklists.packing.length})` });
-    const btnPrep = el("button", { type: "button", text: `Prep (${checklists.prep.length})` });
-    toggle.append(btnPrep, btnPack);
-    panelBody.append(toggle, listWrap);
+    panelBody.appendChild(el("p", { class: "summary-line",
+      text: "A simplified day-by-day view of what happens when. Use the Day map for the detailed location view." }));
 
-    function row(item, withDue) {
-      const done = Store.isDone(item.id, item.done);
-      const input = el("input", { type: "checkbox", "aria-label": item.label });
-      input.checked = done;
-      const rowEl = el("label", { class: "check" + (done ? " is-done" : "") }, [
-        input,
-        el("span", { class: "check__box", html: '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>' }),
-        el("span", { class: "check__body" }, [
-          el("span", { class: "check__label", text: item.label }),
-          withDue && item.due ? dueEl(item.due) : null,
+    for (const day of days) {
+      const base = byId[day.baseId];
+      let keyItems = day.items.filter((item) =>
+        item.mode || /park|castle|aquarium|lunch|dinner|lesson|monkey|teamlab|disney|universal|flight|check in|check out/i.test(item.text)
+      ).slice(0, 5);
+      if (keyItems.length < 3) keyItems = day.items.slice(0, 5);
+      const card = el("article", { class: "simple-day" }, [
+        el("header", { class: "simple-day__head" }, [
+          el("span", { class: "simple-day__badge", text: `D${day.n}` }),
+          el("div", { class: "simple-day__title" }, [
+            el("span", { class: "simple-day__date", text: Fmt.shortDate(day.date) }),
+            el("h3", { text: day.title })
+          ]),
+          base ? el("span", { class: "simple-day__base", style: "background:" + segColor(base.segment), text: base.name.replace(" - ", " / ") }) : null
         ]),
+        el("ol", { class: "simple-day__items" }, keyItems.map((item) =>
+          el("li", {}, [
+            el("span", { class: "simple-day__time", text: item.time }),
+            el("span", { class: "simple-day__text", text: item.text }),
+            item.mode ? el("span", { class: `simple-day__mode mode-${item.modeClass || "local"}`, text: item.mode }) : null
+          ])
+        )),
+        day.meals ? el("div", { class: "simple-day__meals" }, [
+          el("b", { text: "Food: " }),
+          el("span", { text: Object.values(day.meals).join(" / ") })
+        ]) : null
       ]);
-      input.addEventListener("change", () => {
-        Store.setDone(item.id, input.checked);
-        rowEl.classList.toggle("is-done", input.checked);
-      });
-      return rowEl;
+      panelBody.appendChild(card);
     }
-
-    function dueEl(due) {
-      const days = Fmt.daysUntil(due);
-      const soon = days != null && days <= 45;
-      const txt = days != null && days >= 0
-        ? `Due ${Fmt.shortDate(due)} · ${days} day${days === 1 ? "" : "s"} away`
-        : `Due ${Fmt.shortDate(due)}`;
-      return el("span", { class: "check__due " + (soon ? "is-soon" : "is-ok"), text: txt });
-    }
-
-    function show(which) {
-      const isPrep = which === "prep";
-      btnPrep.classList.toggle("is-active", isPrep);
-      btnPack.classList.toggle("is-active", !isPrep);
-      listWrap.innerHTML = "";
-      const items = isPrep
-        ? [...checklists.prep].sort((a, b) => (a.due || "").localeCompare(b.due || ""))
-        : checklists.packing;
-      if (!items.length) {
-        listWrap.appendChild(el("div", { class: "empty", text: "Nothing here yet." }));
-        return;
-      }
-      items.forEach((it) => listWrap.appendChild(row(it, isPrep)));
-    }
-
-    btnPrep.addEventListener("click", () => show("prep"));
-    btnPack.addEventListener("click", () => show("packing"));
-    show("prep");
   }
 
   /* ---------------- Bookings ---------------- */
@@ -186,12 +167,12 @@ const Tabs = (() => {
   }
 
   function open(view) {
-    if (view !== "budget" && view !== "checklists" && view !== "bookings") return;
-    // Register (and close any prior overlay) BEFORE revealing this one,
-    // otherwise a panel→panel switch would re-hide what we just built.
+    if (view !== "budget" && view !== "itinerary" && view !== "bookings") return;
+    // Register (and close any prior overlay) before revealing this one,
+    // otherwise a panel-to-panel switch would re-hide what we just built.
     App.openOverlay(hide);
     if (view === "budget") { reveal("Budget"); budget_(); }
-    else if (view === "checklists") { reveal("Checklists"); checklists_(); }
+    else if (view === "itinerary") { reveal("Itinerary"); itinerary_(); }
     else if (view === "bookings") { reveal("Bookings"); bookings_(); }
   }
 

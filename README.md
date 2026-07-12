@@ -1,11 +1,11 @@
-# Japan 2028 — Family Trip
+# Japan 2028 - Family Trip
 
 A mobile-first, map-first itinerary web app. The map of Japan is the home screen;
-every base and travel leg is tappable and drills into detail. Budget, checklists and
-bookings live behind the bottom nav.
+every base and travel leg is tappable and drills into detail. Budget, itinerary
+and bookings live behind the bottom nav.
 
-Built as a plain static site — **no build step, no framework**. Vanilla JS + [Leaflet](https://leafletjs.com/)
-with the CARTO Positron basemap (free, no API key).
+Built as a plain static site: no build step, no framework. Vanilla JS +
+[Leaflet](https://leafletjs.com/) with the CARTO Positron basemap.
 
 ## Run locally
 
@@ -16,54 +16,56 @@ npx serve .
 # then open the printed http://localhost:xxxx URL
 ```
 
-Opening `index.html` directly (file://) mostly works too, but a server avoids browser
+Opening `index.html` directly mostly works too, but a server avoids browser
 restrictions on module/asset loading.
 
 ## Structure
 
+```text
+index.html          # markup + script/style includes
+css/app.css         # winter-Japan theme, mobile-first
+data.js             # single source of truth: trip, locations, legs, days, budget
+js/store.js         # localStorage: actual spend
+js/format.js        # date/money/duration helpers + tiny DOM builder
+js/map.js           # Leaflet map: segment-coloured pins + route lines
+js/day-view.js      # day selector, detailed stops, transport lines + food highlights
+js/rail-geometry.js # exact railway-track geometry derived from OpenStreetMap
+js/sheets.js        # location + leg detail bottom sheets
+js/tabs.js          # Budget / Itinerary / Bookings panels
+js/app.js           # bootstrap, bottom-nav, back-button overlay handling
 ```
-index.html        # markup + script/style includes
-css/app.css       # winter-Japan theme, mobile-first
-data.js           # single source of truth — trip, locations, legs, days, budget, checklists
-js/store.js       # localStorage: checklist ticks + actual spend
-js/format.js      # date/money/duration helpers + tiny DOM builder
-js/map.js         # Leaflet map: segment-coloured pins + route lines
-js/sheets.js      # location + leg detail bottom sheets
-js/tabs.js        # Budget / Checklists / Bookings panels
-js/app.js         # bootstrap, bottom-nav, back-button overlay handling
-```
 
-## Editing the trip
+## Editing The Trip
 
-All itinerary content is static in **`data.js`** — edit it there:
+All itinerary content is static in `data.js`:
 
-- **`locations`** → map pins (coords, dates, hotel notes, points of interest, `bookings`)
-- **`legs`** → route lines (mode, duration, distance; `mapLine: false` keeps flights off the map)
-- **`days`** → the 13-day timeline (times, transport, Western meal picks)
-- **`budget`** → planned figures (actuals are entered in-app and saved to `localStorage`)
-- **`checklists`** → packing + prep (with due dates)
+- `locations` -> map pins, dates, hotel notes, points of interest, bookings
+- `legs` -> route lines, mode, duration and distance
+- `days` -> the 13-day timeline, transport and meal picks
+- `dayMaps` -> detailed hotel, station, attraction and food map stops
+- `budget` -> planned figures; actuals are entered in-app and saved to localStorage
 
-User edits (checklist ticks, actual spend) persist in `localStorage` under `japan2028:v1`;
-they never touch `data.js`.
+User edits for actual spend persist in `localStorage` under `japan2028:v1`.
+They never touch `data.js`.
 
-## Deploy to Vercel
+## Deploy To Vercel
 
 It's a static site, so no config is needed.
 
-**Option A — CLI (no git required):**
+Option A, CLI:
 
 ```bash
 npm i -g vercel
-vercel        # from this folder; accept the defaults
-vercel --prod # promote to production
+vercel
+vercel --prod
 ```
 
-**Option B — Git + dashboard:** push this folder to a GitHub repo, then "Import Project"
-in Vercel. Framework preset: **Other**. Build command: none. Output directory: `./`.
+Option B, Git + dashboard: push this folder to a GitHub repo, then import the
+project in Vercel. Framework preset: Other. Build command: none. Output
+directory: `./`.
 
 ## Notes
 
-- All clock times are approximate — 2028 timetables aren't published yet. Reconfirm when booking.
+- All clock times are approximate; 2028 timetables are not published yet.
 - Coordinates are accurate to the venue but worth a final check before the trip.
-- The full plan (route rationale, food guide, budget breakdown, open items) lives in
-  `planning/japan-2028-build-plan.md`.
+- The full plan lives in `planning/japan-2028-build-plan.md`.

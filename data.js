@@ -6,7 +6,7 @@
    - `locations` render as map pins; `legs` render as the route lines between them.
    - Tapping a location shows the `days` based there (filter days by baseId).
    - Tapping a leg shows its mode / duration / distance detail.
-   - `segments` gives each leg/pin its colour. `budget` + `checklists` power those tabs.
+   - `segments` gives each leg/pin its colour. `budget` powers the budget tab.
 
    Load as a <script> (globals) or import the module export at the bottom.
    All times/prices are planning estimates — reconfirm when booking.
@@ -325,6 +325,102 @@ const days = [
   }
 ];
 
+/* Day-map stops. These are deliberately separate from the country-level route:
+   they describe the actual sequence of places seen on each day. Hotel entries
+   use the planned neighbourhood until exact accommodation is booked. */
+const dayMaps = {
+  1: { stops: [
+    { time: "19:45", label: "Kansai Airport", kind: "airport", coords: [34.4342, 135.2333], mode: "Jetstar JQ23", modeClass: "flight" },
+    { time: "21:45", label: "Osaka hotel area", kind: "hotel", coords: [34.6687, 135.5013], mode: "Private transfer / taxi", modeClass: "transfer", durationMin: 55, detail: "Namba / Shinsaibashi — exact hotel TBD" }
+  ]},
+  2: { stops: [
+    { time: "09:30", label: "Osaka hotel area", kind: "hotel", coords: [34.6687, 135.5013] },
+    { time: "10:00", label: "Osaka Castle", kind: "attraction", coords: [34.6873, 135.5259], mode: "Tanimachi metro", modeClass: "local", durationMin: 25 },
+    { time: "12:00", label: "Castle lunch area", kind: "food", coords: [34.6860, 135.5240], mode: "Walk", modeClass: "local", durationMin: 5, detail: "Cafe or burger near the castle" },
+    { time: "13:30", label: "Kaiyukan Aquarium", kind: "attraction", coords: [34.6545, 135.4290], mode: "Chuo metro", modeClass: "local", durationMin: 35 },
+    { time: "17:00", label: "Dotonbori dinner", kind: "food", coords: [34.6687, 135.5013], mode: "Metro to Namba", modeClass: "local", durationMin: 30, detail: "Burgers, Italian, pizza or steak" }
+  ]},
+  3: { stops: [
+    { time: "07:30", label: "Osaka hotel", kind: "hotel", coords: [34.6687, 135.5013], detail: "Hotel buffet breakfast" },
+    { time: "08:00", label: "Nishikujo Station", kind: "station", coords: [34.6827, 135.4657], mode: "JR transfer", modeClass: "local", durationMin: 20 },
+    { time: "09:00", label: "Universal Studios", kind: "attraction", coords: [34.6654, 135.4323], mode: "JR Yumesaki line", modeClass: "local", durationMin: 6, via: [[34.6736, 135.4430], [34.6678, 135.4380]] },
+    { time: "12:30", label: "Mel's / in-park food", kind: "food", coords: [34.6662, 135.4328], mode: "Walk", modeClass: "local", durationMin: 5, detail: "Burgers, shakes, pizza or chicken" },
+    { time: "19:00", label: "Universal CityWalk", kind: "food", coords: [34.6678, 135.4380], mode: "Walk", modeClass: "local", durationMin: 10, detail: "Hard Rock Cafe or Bubba Gump" },
+    { time: "21:00", label: "Osaka hotel", kind: "hotel", coords: [34.6687, 135.5013], mode: "JR train", modeClass: "local", durationMin: 25 }
+  ]},
+  4: { stops: [
+    { time: "09:00", label: "Osaka hotel", kind: "hotel", coords: [34.6687, 135.5013] },
+    { time: "09:40", label: "Shin-Osaka Station", kind: "station", coords: [34.7335, 135.5002], mode: "Taxi", modeClass: "transfer", durationMin: 25 },
+    { time: "10:35", label: "Nagoya Station", kind: "station", coords: [35.1706, 136.8816], mode: "Tokaido Shinkansen", modeClass: "bullet", durationMin: 50, railKey: "tokaido_shin_osaka_nagoya" },
+    { time: "13:00", label: "Matsumoto Station", kind: "station", coords: [36.2300, 137.9640], mode: "Ltd Exp Shinano", modeClass: "limited-express", durationMin: 120, railKey: "chuo_nagoya_matsumoto" },
+    { time: "13:30", label: "Matsumoto lunch", kind: "food", coords: [36.2312, 137.9662], mode: "Walk", modeClass: "local", durationMin: 5, detail: "Pizza Verde or local burger" },
+    { time: "14:30", label: "Matsumoto Castle", kind: "attraction", coords: [36.2385, 137.9686], mode: "Walk", modeClass: "local", durationMin: 15 },
+    { time: "18:00", label: "Old-town dinner", kind: "food", coords: [36.2348, 137.9710], mode: "Walk", modeClass: "local", durationMin: 10, detail: "French/Italian or Hawaiian/American" }
+  ]},
+  5: { stops: [
+    { time: "09:15", label: "Matsumoto hotel", kind: "hotel", coords: [36.2300, 137.9640] },
+    { time: "09:30", label: "Matsumoto Station", kind: "station", coords: [36.2300, 137.9640], mode: "Walk", modeClass: "local", durationMin: 5 },
+    { time: "10:25", label: "Nagano Station", kind: "station", coords: [36.6430, 138.1890], mode: "Ltd Exp Shinano", modeClass: "limited-express", durationMin: 55, railKey: "shinonoi_matsumoto_nagano" },
+    { time: "10:45", label: "Nagano station lunch", kind: "food", coords: [36.6424, 138.1880], mode: "Walk", modeClass: "local", durationMin: 5, detail: "Western cafe or burger" },
+    { time: "13:00", label: "Prince West Wing", kind: "hotel", coords: [36.7130, 138.5000], mode: "Express bus", modeClass: "coach", durationMin: 80 }
+  ]},
+  6: { stops: [
+    { time: "08:00", label: "Prince West Wing", kind: "hotel", coords: [36.7130, 138.5000], detail: "Breakfast buffet" },
+    { time: "09:00", label: "Yakebitai ski school", kind: "activity", coords: [36.7157, 138.4976], mode: "Walk / resort shuttle", modeClass: "local", durationMin: 10 },
+    { time: "12:00", label: "Mountain lunch", kind: "food", coords: [36.7180, 138.5030], mode: "Ski / lift", modeClass: "local", durationMin: 10, detail: "Burgers, curry or pasta" },
+    { time: "16:00", label: "Prince West Wing", kind: "hotel", coords: [36.7130, 138.5000], mode: "Ski back", modeClass: "local", durationMin: 10, detail: "Onsen and buffet; East Wing French-Italian option" }
+  ]},
+  7: { stops: [
+    { time: "09:00", label: "Prince West Wing", kind: "hotel", coords: [36.7130, 138.5000] },
+    { time: "09:15", label: "Lesson area", kind: "activity", coords: [36.7157, 138.4976], mode: "Resort shuttle", modeClass: "local", durationMin: 10 },
+    { time: "12:00", label: "Mountain lunch", kind: "food", coords: [36.7180, 138.5030], mode: "Ski / lift", modeClass: "local", durationMin: 10, detail: "Western food or burger van" },
+    { time: "18:00", label: "Ichinose dinner option", kind: "food", coords: [36.7205, 138.4915], mode: "Evening shuttle", modeClass: "local", durationMin: 15, detail: "Pizzeria, Chinese or ramen" }
+  ]},
+  8: { stops: [
+    { time: "09:00", label: "Prince West Wing", kind: "hotel", coords: [36.7130, 138.5000] },
+    { time: "09:15", label: "Yakebitai slopes", kind: "activity", coords: [36.7240, 138.5090], mode: "Ski / lift", modeClass: "local", durationMin: 10 },
+    { time: "12:00", label: "Mountain lunch", kind: "food", coords: [36.7248, 138.5070], mode: "Ski", modeClass: "local", durationMin: 5, detail: "On-mountain Western" },
+    { time: "13:00", label: "Okushiga area", kind: "activity", coords: [36.7377, 138.5168], mode: "Connected lifts", modeClass: "local", durationMin: 20 },
+    { time: "18:00", label: "East Wing dinner", kind: "food", coords: [36.7146, 138.5054], mode: "Hotel shuttle", modeClass: "local", durationMin: 10, detail: "Formal Western / French-Italian" }
+  ]},
+  9: { stops: [
+    { time: "08:30", label: "Prince West Wing", kind: "hotel", coords: [36.7130, 138.5000] },
+    { time: "09:00", label: "Kanbayashi trailhead", kind: "station", coords: [36.7332, 138.4265], mode: "Resort shuttle / bus", modeClass: "coach", durationMin: 35 },
+    { time: "10:00", label: "Snow Monkey Park", kind: "attraction", coords: [36.7325, 138.4620], mode: "Snow trail walk", modeClass: "local", durationMin: 35 },
+    { time: "12:45", label: "Mountain lunch", kind: "food", coords: [36.7180, 138.5030], mode: "Walk + bus", modeClass: "coach", durationMin: 60 },
+    { time: "13:30", label: "Final runs", kind: "activity", coords: [36.7240, 138.5090], mode: "Ski / lift", modeClass: "local", durationMin: 10 }
+  ]},
+  10: { stops: [
+    { time: "09:15", label: "Prince West Wing", kind: "hotel", coords: [36.7130, 138.5000] },
+    { time: "10:45", label: "Nagano Station", kind: "station", coords: [36.6430, 138.1890], mode: "Express bus", modeClass: "coach", durationMin: 80 },
+    { time: "11:00", label: "Nagano station lunch", kind: "food", coords: [36.6424, 138.1880], mode: "Walk", modeClass: "local", durationMin: 5, detail: "Western cafe or burger" },
+    { time: "14:00", label: "Tokyo Station", kind: "station", coords: [35.6812, 139.7671], mode: "Hokuriku Shinkansen", modeClass: "bullet", durationMin: 90, railKey: "hokuriku_nagano_tokyo" },
+    { time: "15:00", label: "Shinjuku hotel", kind: "hotel", coords: [35.6906, 139.6948], mode: "JR / subway or taxi", modeClass: "local", durationMin: 25 },
+    { time: "18:00", label: "Shinjuku dinner", kind: "food", coords: [35.6897, 139.7005], mode: "Walk", modeClass: "local", durationMin: 10, detail: "Shake Shack, Sawamura, Italian or steak" }
+  ]},
+  11: { stops: [
+    { time: "08:00", label: "Sarabeth's breakfast", kind: "food", coords: [35.6895, 139.7007], detail: "Eggs Benedict or pancakes" },
+    { time: "09:15", label: "Godzilla Head", kind: "attraction", coords: [35.6955, 139.7020], mode: "Walk", modeClass: "local", durationMin: 15 },
+    { time: "11:00", label: "Shibuya Crossing", kind: "attraction", coords: [35.6595, 139.7005], mode: "JR Yamanote", modeClass: "local", durationMin: 20, railKey: "yamanote_shinjuku_shibuya" },
+    { time: "13:00", label: "Shibuya lunch", kind: "food", coords: [35.6620, 139.7020], mode: "Walk", modeClass: "local", durationMin: 10, detail: "Shake Shack or Eggs 'n Things" },
+    { time: "14:30", label: "teamLab Planets", kind: "attraction", coords: [35.6494, 139.7897], mode: "Local train", modeClass: "local", durationMin: 35, via: [[35.6655, 139.7126], [35.6707, 139.7508], [35.6550, 139.7925]] },
+    { time: "17:30", label: "Shinjuku dinner", kind: "food", coords: [35.6897, 139.7005], mode: "Train", modeClass: "local", durationMin: 35, detail: "Steak, Italian or American" }
+  ]},
+  12: { stops: [
+    { time: "07:00", label: "Shinjuku hotel", kind: "hotel", coords: [35.6906, 139.6948], detail: "Early buffet or pastries" },
+    { time: "08:30", label: "Tokyo Disneyland", kind: "attraction", coords: [35.6329, 139.8804], mode: "Good Neighbor shuttle", modeClass: "transfer", durationMin: 60 },
+    { time: "12:30", label: "Disneyland lunch", kind: "food", coords: [35.6323, 139.8806], mode: "Walk", modeClass: "local", durationMin: 5, detail: "Burgers, pizza or chicken" },
+    { time: "18:30", label: "Disneyland dinner", kind: "food", coords: [35.6315, 139.8814], mode: "Walk", modeClass: "local", durationMin: 5, detail: "Table service or counter burgers" },
+    { time: "21:40", label: "Shinjuku hotel", kind: "hotel", coords: [35.6906, 139.6948], mode: "Reserved hotel shuttle", modeClass: "transfer", durationMin: 60 }
+  ]},
+  13: { stops: [
+    { time: "09:00", label: "Shinjuku hotel", kind: "hotel", coords: [35.6906, 139.6948] },
+    { time: "Day", label: "Final Tokyo stop", kind: "attraction", coords: [35.6897, 139.7005], mode: "Walk / local train", modeClass: "local", durationMin: 10, detail: "Flexible until flights are confirmed" },
+    { time: "17:00", label: "Airport meal options", kind: "food", coords: [35.5494, 139.7798], mode: "Monorail / Keikyu", modeClass: "transfer", durationMin: 40, detail: "Western cafes and restaurants at Haneda" },
+    { time: "18:00", label: "Haneda Airport", kind: "airport", coords: [35.5494, 139.7798], mode: "Airport rail", modeClass: "transfer", durationMin: 5 }
+  ]}
+};
+
 /* AUD planning figures. actual = null until booked (fill via the tracker → localStorage). */
 const budget = [
   { id: "b1",  category: "Flights",       label: "BNE→KIX / HND→BNE ×4 (open-jaw, Jan peak)",           planned: 6000, actual: null },
@@ -344,25 +440,6 @@ const budget = [
   // Pre-bookable subtotal ≈ A$17,000. Incidentals / spending money (~$2,000–3,000) tracked separately, on top.
 ];
 
-/* User-editable in the app (done state persists to localStorage). */
-const checklists = {
-  packing: [
-    { id: "p1", label: "Snowboard gloves", done: false }
-    // extend as needed
-  ],
-  prep: [
-    { id: "x1", label: "Book flights (open-jaw; book early for Jan peak)",                 done: false, due: "2027-06-01" },
-    { id: "x2", label: "Book KIX private transfer / airport shuttle",                       done: false, due: "2027-12-01" },
-    { id: "x3", label: "Book Shiga snowboard lessons (English) + rentals",                  done: false, due: "2027-10-01" },
-    { id: "x4", label: "Buy USJ tickets + Express Pass 4 (release ~2 mths out)",            done: false, due: "2027-11-08" },
-    { id: "x5", label: "Buy Disneyland tickets + plan Premier Access",                      done: false, due: "2027-11-15" },
-    { id: "x6", label: "Reserve the Good Neighbor Disney shuttle (advance, limited seats)", done: false, due: "2027-12-17" },
-    { id: "x7", label: "Reserve shinkansen / Ltd Exp Shinano seats (~1 mth out)",           done: false, due: "2027-12-07" },
-    { id: "x8", label: "Book teamLab Planets timed entry",                                  done: false, due: "2027-12-15" },
-    { id: "x9", label: "Travel insurance + check passports (6+ mths validity)",             done: false, due: "2027-09-01" }
-  ]
-};
-
 /* STARTING palette only — run the real visual pass with the frontend-design guidance. */
 const theme = {
   bg: "#F5F7FA", surface: "#FFFFFF", text: "#1C2530", muted: "#66707D",
@@ -372,5 +449,5 @@ const theme = {
 
 /* Export for module bundlers; harmless if loaded as a plain <script>. */
 if (typeof module !== "undefined" && module.exports) {
-  module.exports = { trip, segments, legs, locations, days, budget, checklists, theme };
+  module.exports = { trip, segments, legs, locations, days, dayMaps, budget, theme };
 }

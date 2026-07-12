@@ -1,13 +1,12 @@
 /* =============================================================================
    store.js — localStorage persistence
-   Static itinerary lives in data.js; only user state persists here:
-   checklist ticks + actual spend, keyed by item id.
+   Static itinerary lives in data.js; only actual spend persists here.
 ============================================================================= */
 
 const Store = (() => {
   const KEY = "japan2028:v1";
 
-  const empty = { checks: {}, actuals: {} };
+  const empty = { actuals: {} };
 
   function read() {
     try {
@@ -15,7 +14,6 @@ const Store = (() => {
       if (!raw) return { ...empty };
       const parsed = JSON.parse(raw);
       return {
-        checks: parsed.checks || {},
         actuals: parsed.actuals || {},
       };
     } catch (e) {
@@ -36,15 +34,6 @@ const Store = (() => {
   }
 
   return {
-    /* Checklist done-state ---------------------------------------------- */
-    isDone(id, fallback = false) {
-      return id in state.checks ? !!state.checks[id] : fallback;
-    },
-    setDone(id, done) {
-      state.checks[id] = !!done;
-      persist();
-    },
-
     /* Actual spend ------------------------------------------------------ */
     getActual(id) {
       const v = state.actuals[id];

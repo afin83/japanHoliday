@@ -198,6 +198,28 @@ body {
   color: var(--ink-soft); font: 800 .76rem var(--font); cursor: pointer;
 }
 .map-mode button.is-active { color: #fff; background: var(--ink); }
+/* Route-view location switcher (mirrors the day picker) */
+.route-picker {
+  position: fixed; z-index: 950; top: calc(var(--safe-top) + 108px); left: 0; right: 0;
+  display: flex; gap: 7px; overflow-x: auto; padding: 4px 12px 10px; scrollbar-width: none;
+  scroll-padding: 12px;
+}
+.route-picker[hidden] { display: none; }
+.route-picker::-webkit-scrollbar { display: none; }
+.route-picker button {
+  flex: 0 0 auto; min-height: 46px; display: flex; flex-direction: column;
+  align-items: flex-start; justify-content: center; gap: 1px; padding: 6px 12px;
+  border: 1px solid var(--frost-2); border-radius: 13px; color: var(--ink-soft);
+  background: var(--surface-90); backdrop-filter: blur(8px); box-shadow: var(--shadow-sm);
+  cursor: pointer; white-space: nowrap;
+}
+.route-picker__top { display: flex; align-items: center; gap: 6px; }
+.route-picker__dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+.route-picker b { font: 800 .82rem var(--font); }
+.route-picker__sub { font: 700 .64rem var(--font); color: var(--muted); padding-left: 14px; }
+.route-picker button.is-active { background: var(--ink); color: #fff; border-color: var(--ink); transform: translateY(-2px); }
+.route-picker button.is-active .route-picker__sub { color: var(--sky); }
+
 .day-view { position: fixed; inset: 0; z-index: 450; pointer-events: none; }
 .day-picker {
   position: absolute; top: calc(var(--safe-top) + 110px); left: 0; right: 0;

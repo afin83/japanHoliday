@@ -99,7 +99,8 @@ const App = (() => {
         if (activeClose) closeOverlay(false);
         document.getElementById("legendToggle").hidden = mode === "day";
         document.getElementById("legend").hidden = true;
-        if (mode === "day") DayView.show(); else DayView.hide();
+        if (mode === "day") { DayView.show(); RouteNav.hide(); }
+        else { DayView.hide(); RouteNav.show(); }
       });
     });
     document.querySelectorAll(".tabbar__btn").forEach((btn) => {
@@ -131,6 +132,7 @@ const App = (() => {
     fillTripStrip();
     buildLegend();
     MapView.init();
+    RouteNav.init();
     wire();
     // Leaflet occasionally needs a nudge once layout settles.
     setTimeout(() => MapView.invalidate(), 200);

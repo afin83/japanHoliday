@@ -49,6 +49,9 @@
     <button data-map-mode="day" type="button" aria-pressed="false">Day</button>
   </div>
 
+  <!-- Route view: jump straight to a location (same as tapping its map pin) -->
+  <div class="route-picker" id="routePicker" role="group" aria-label="Jump to a location" hidden></div>
+
   <section class="day-view" id="dayView" aria-label="Day map controls" hidden>
     <div class="day-picker" id="dayPicker" aria-label="Choose a day"></div>
     <article class="day-brief" id="dayBrief"></article>
@@ -109,6 +112,7 @@
   <script src="js/store.js"></script>
   <script src="js/format.js"></script>
   <script src="js/map.js"></script>
+  <script src="js/route-nav.js"></script>
   <script src="js/rail-geometry.js"></script>
   <script src="js/day-view.js"></script>
   <script src="js/sheets.js"></script>

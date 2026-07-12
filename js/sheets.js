@@ -63,6 +63,7 @@ const Sheets = (() => {
     scrim.hidden = true;
     MapView.deselect();
     MapView.clearLegHighlight();
+    RouteNav.clear();
   }
 
   /* ---------- content builders ---------- */
@@ -187,6 +188,7 @@ const Sheets = (() => {
     App.openOverlay(hide);
     reveal(loc.segment);
     MapView.selectLocation(loc.id);
+    RouteNav.setActive(loc.id);
   }
 
   /* ---------- leg ---------- */

@@ -182,7 +182,16 @@ body {
 .day-step-nav {
   position: absolute;
   z-index: 760;
-  top: 50%;
+  top: clamp(
+    calc(var(--safe-top) + 166px),
+    50%,
+    calc(100vh - var(--tabbar-h) - var(--safe-bottom) - 38vh - 44px)
+  );
+  top: clamp(
+    calc(var(--safe-top) + 166px),
+    50%,
+    calc(100dvh - var(--tabbar-h) - var(--safe-bottom) - 38vh - 44px)
+  );
   width: 44px;
   height: 44px;
   display: grid;
